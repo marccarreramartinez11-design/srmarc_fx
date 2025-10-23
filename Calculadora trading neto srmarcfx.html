@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex"> <!-- Evita que Google la indexe -->
+    <title>Calculadora de Trading</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(to bottom, #87CEEB, #E0F6FF);
+            min-height: 100vh;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .calculator {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #resultado {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 4px;
+            display: none;
+        }
+        .instagram-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .instagram-link a {
+            color: #E1306C; /* Color típico de Instagram */
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .instagram-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculadora de Trading</h1>
+    <div class="calculator">
+        <div class="input-group">
+            <label for="cuenta">Cuenta (USD):</label>
+            <input type="number" id="cuenta" value="10000" step="any" required>
+        </div>
+        <div class="input-group">
+            <label for="riesgo">Riesgo (%):</label>
+            <input type="number" id="riesgo" value="1" step="any" required>
+        </div>
+        <div class="input-group">
+            <label for="stopLoss">Stop Loss (Pips):</label>
+            <input type="number" id="stopLoss" value="3.5" step="any" required>
+        </div>
+        <div class="input-group">
+            <label for="spread">Spread (Pips):</label>
+            <input type="number" id="spread" value="0" step="any" required>
+        </div>
+        <div class="input-group">
+            <label for="comision">Comisión (USD por lote):</label>
+            <input type="number" id="comision" value="4" step="any" required>
+        </div>
+        <div class="input-group">
+            <label for="valorPips">Valor por Pip (por lote):</label>
+            <input type="number" id="valorPips" value="10" step="any" required>
+        </div>
+        <button onclick="calcular()">Calcular</button>
+        <div id="resultado"></div>
+    </div>
+    <div class="instagram-link">
+        <p>Sígueme en Instagram: <a href="https://www.instagram.com/srmarc_fx" target="_blank">@srmarc_fx</a></p>
+    </div>
+
+    <script>
+        function calcular() {
+            const cuenta = parseFloat(document.getElementById('cuenta').value);
+            const riesgo = parseFloat(document.getElementById('riesgo').value) / 100;
+            const stopLoss = parseFloat(document.getElementById('stopLoss').value);
+            const spread = parseFloat(document.getElementById('spread').value);
+            const comision = parseFloat(document.getElementById('comision').value);
+            const valorPips = parseFloat(document.getElementById('valorPips').value);
+
+            if (isNaN(cuenta) || isNaN(riesgo) || isNaN(stopLoss) || isNaN(spread) || isNaN(comision) || isNaN(valorPips)) {
+                alert('Por favor, ingresa valores válidos en todos los campos.');
+                return;
+            }
+
+            const riesgoUsd = cuenta * riesgo;
+            const pipsTotal = stopLoss + spread;
+            const denominador = (pipsTotal * valorPips) + comision;
+            const lote = denominador !== 0 ? riesgoUsd / denominador : 0;
+
+            const resultadoDiv = document.getElementById('resultado');
+            resultadoDiv.style.display = 'block';
+            resultadoDiv.innerHTML = `
+                <p><strong>USD (Riesgo):</strong> ${riesgoUsd.toFixed(2)}</p>
+                <p><strong>Lote Necesario:</strong> ${lote.toFixed(6)}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
